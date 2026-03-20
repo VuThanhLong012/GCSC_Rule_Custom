@@ -9,8 +9,8 @@ index=vpa_os_linux sourcetype=linux_secure signature="Failed password"
     max(_time) as last_time
     values(hostname) as dest
     values(src_port) as src_port
-    by _time tenant src_ip user_name
+    by _time tenant hostname src_ip user_name
 | where failed_attempts >= 5
 | eval first_seen=strftime(first_time,"%Y-%m-%d %H:%M:%S")
 | eval last_seen=strftime(last_time,"%Y-%m-%d %H:%M:%S")
-| table _time tenant src_ip user_name failed_attempts first_seen last_seen 
+| table _time tenant hostname src_ip user_name failed_attempts first_seen last_seen 
