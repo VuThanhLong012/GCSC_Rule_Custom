@@ -1,7 +1,16 @@
-index=vpa_os_linux sourcetype=linux_secure # Rule đã ổn => thay bằng macro linux_secure
-| search signature IN ("Failed password", "authentication failure", "Invalid user")
+# Rule đã ổn => thay bằng macro linux_secure
+index=vpa_os_linux sourcetype=linux_secure signature="Failed password"  
 | lookup vpa_linux.csv hostname OUTPUT src_ip 
 | where isnotnull(src_ip)
 | bucket _time span=5m
-| stats count as failed_attempts values(signature) as signatures values(src_port) as src_port by _time tenant src_ip user_name
+| stats 
+    count as failed_attempts
+    min(_time) as first_time
+    max(_time) as last_time
+    values(hostname) as dest
+    values(src_port) as src_port
+    by _time tenant src_ip user_name
 | where failed_attempts >= 5
+| eval first_seen=strftime(first_time,"%Y-%m-%d %H:%M:%S")
+| eval last_seen=strftime(last_time,"%Y-%m-%d %H:%M:%S")
+| table _time tenant src_ip user_name failed_attempts first_seen last_seen 
