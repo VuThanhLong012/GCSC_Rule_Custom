@@ -1,0 +1,22 @@
+# Rule đã ổn => thay bằng macro linux_secure
+index=vpa_os_linux sourcetype=linux_secure signature IN ("Accepted password", "Accepted publickey")
+| lookup vpa_linux.csv hostname OUTPUT src_ip
+| where isnotnull(src_ip) AND user_name="root"
+| rename hostname as dest, user_name as user
+| rex field=_raw "Accepted\s+(?:password|publickey)\s+for\s+(?<user_from_raw>\S+)\s+from\s+(?<src>\d{1,3}(?:\.\d{1,3}){3})\s+port\s+(?<src_port>\d+)"
+| eval auth_method=case(
+    signature=="Accepted password","password",
+    signature=="Accepted publickey","publickey",
+    1=1,"other"
+)
+| eval action="success"
+| eval app="sshd"
+| eval login_time=strftime(_time,"%Y-%m-%d %H:%M:%S")
+| table _time tenant src_ip dest src src_port user auth_method action app login_time
+
+# đăng nhập SSH thành công trực tiếp vào tài khoản root
+#SAMPLE
+'''
+Mar 27 11:21:05 server1 sshd[24567]: Accepted password for root from 203.0.113.10 port 51234 ssh2
+Mar 27 11:25:44 server1 sshd[24888]: Accepted publickey for root from 198.51.100.25 port 60321 ssh2: RSA SHA256:abcd1234example
+'''
