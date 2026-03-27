@@ -11,8 +11,8 @@ index=vpa_os_linux sourcetype=linux_secure signature IN ("Accepted password", "A
 )
 | eval action="success"
 | eval app="sshd"
-| eval login_time=strftime(_time,"%Y-%m-%d %H:%M:%S")
-| table _time tenant src_ip dest src src_port user auth_method action app login_time
+| eval first_seen=strftime(_time,"%Y-%m-%d %H:%M:%S")
+| table _time tenant src_ip dest src src_port user auth_method action app first_seen
 
 # đăng nhập SSH thành công trực tiếp vào tài khoản root
 #SAMPLE
