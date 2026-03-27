@@ -2,12 +2,13 @@
 index=vpa_os_linux sourcetype=linux_secure signature="Failed password"  
 | lookup vpa_linux.csv hostname OUTPUT src_ip
 | where isnotnull(src_ip)
+| rename hostname as dest
 | bucket _time span=5m
 | stats 
     count as failed_attempts
     earliest(_time) as first_time
     latest(_time) as last_time
-    values(hostname) as dest_host
+    values(dest) as dest_host
     values(src_port) as src_ports
     by _time tenant src_ip user_name
 | where failed_attempts >= 5
