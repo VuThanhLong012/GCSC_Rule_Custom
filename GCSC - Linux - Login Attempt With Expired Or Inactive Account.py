@@ -20,11 +20,11 @@ index=linux sourcetype=linux_secure "account" ("has expired" OR "inactive for")
 # Thử đăng nhập bằng tài khoản đã hết hạn hoặc không hoạt động
 #SAMPLE
 '''
-5/14/26
+5/13/26
 10:57:33.934 AM	
 2026-05-14T10:57:33.934998+07:00 AGENT su[33334]: FAILED SU (to expired_user) splagent on pts/2
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:57:33.933 AM	
 2026-05-14T10:57:33.933673+07:00 AGENT su: pam_unix(su-l:account): account expired_user has expired (account expired)
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
