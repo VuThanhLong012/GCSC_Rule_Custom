@@ -14,19 +14,19 @@ index=linux sourcetype=linux_secure "Accepted password" OR "Accepted publickey"
 # đăng nhập SSH thành công trực tiếp vào tài khoản root
 #SAMPLE
 '''
-5/14/26
+5/13/26
 9:59:17.054 AM	
 2026-05-14T09:59:17.054365+07:00 AGENT (systemd): pam_unix(systemd-user:session): session opened for user root(uid=0) by root(uid=0)
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 9:59:16.972 AM	
 2026-05-14T09:59:16.972978+07:00 AGENT systemd-logind[1095]: New session 7 of user root.
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 9:59:16.917 AM	
 2026-05-14T09:59:16.917061+07:00 AGENT sshd[3917]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 9:59:16.915 AM	
 2026-05-14T09:59:16.915424+07:00 AGENT sshd[3917]: Accepted password for root from 192.168.29.1 port 58296 ssh2
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
