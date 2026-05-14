@@ -1,5 +1,5 @@
 #Trạng thái: Đã test
-#NOTE: Bổ sung 1 số filed đặc trưng như tenant
+#NOTE: Cần bổ sung 1 số filed đặc trưng như tenant
 index=linux sourcetype=linux_secure "Accepted password" OR "Accepted publickey"
 | search user="root"
 | rename host as dest
