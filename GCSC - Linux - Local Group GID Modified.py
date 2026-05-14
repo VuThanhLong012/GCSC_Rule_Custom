@@ -8,7 +8,7 @@ index=linux sourcetype=linux_secure "groupmod" "new gid:" "/etc/group"
 | rename host as dest
 | rex field=_raw "group\s+\(group\s+(?<group>[^/]+)/(?<old_gid>\d+),\s+new\s+gid:\s+(?<new_gid>\d+)"
 | eval first_seen=strftime(_time,"%Y-%m-%d %H:%M:%S")
-| table _time pid dest group old_gid new_gid process first_seen
+| table pid dest group old_gid new_gid process first_seen
 
 #SAMPLE
 '''
