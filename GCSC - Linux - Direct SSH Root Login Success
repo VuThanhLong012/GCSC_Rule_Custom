@@ -1,7 +1,7 @@
 #Trạng thái: Đã test
 #NOTE: 
 - Cần bổ sung 1 số filed đặc trưng như tenant 
-- Thêm lookup tương ứng
+- Thêm lookup tương ứng để lấy src
 - Ở đây em parse bằng app Unix and Linux có sẵn nên 1 số field app không parse được em sẽ dùng rex (Chỗ rex này sẽ nhờ anhtq theo đó mà parse ra field)
 index=linux sourcetype=linux_secure "Accepted password" OR "Accepted publickey"
 | search user="root"
