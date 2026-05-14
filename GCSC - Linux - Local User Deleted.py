@@ -7,7 +7,7 @@
 index=linux sourcetype=linux_secure "userdel[" "delete user"
 | rename host as dest, user_name as user
 | eval first_seen=strftime(_time, "%Y-%m-%d %H:%M:%S")
-| table _time dest user process action first_seen
+| table dest user process action first_seen
 
 # Bắt khi một local user bị xóa
 #SAMPLE
