@@ -12,23 +12,23 @@ index=linux sourcetype=linux_secure "userdel[" "delete user"
 # Bắt khi một local user bị xóa
 #SAMPLE
 '''
-5/14/26
+5/13/26
 10:41:43.164 AM	
 2026-05-14T10:41:43.164060+07:00 AGENT userdel[33100]: delete 'testuser_to_delete' from shadow group 'users'
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:41:43.164 AM	
 2026-05-14T10:41:43.164018+07:00 AGENT userdel[33100]: removed shadow group 'testuser_to_delete' owned by 'testuser_to_delete'
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:41:43.163 AM	
 2026-05-14T10:41:43.163951+07:00 AGENT userdel[33100]: removed group 'testuser_to_delete' owned by 'testuser_to_delete'
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:41:43.161 AM	
 2026-05-14T10:41:43.161280+07:00 AGENT userdel[33100]: delete 'testuser_to_delete' from group 'users'
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:41:43.160 AM	
 2026-05-14T10:41:43.160996+07:00 AGENT userdel[33100]: delete user 'testuser_to_delete'
 '''
