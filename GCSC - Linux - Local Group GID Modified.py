@@ -10,6 +10,7 @@ index=linux sourcetype=linux_secure "groupmod" "new gid:" "/etc/group"
 | eval first_seen=strftime(_time,"%Y-%m-%d %H:%M:%S")
 | table pid dest group old_gid new_gid process first_seen
 
+#Thay đổi thành viên group sẵn có
 #SAMPLE
 '''
 5/13/26
