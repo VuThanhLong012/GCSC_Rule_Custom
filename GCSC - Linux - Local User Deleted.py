@@ -1,18 +1,34 @@
-# Rule đã ổn => thay bằng macro linux_secure
-index=vpa_os_linux sourcetype=linux_secure "userdel[" "delete user"
-| lookup vpa_linux.csv hostname OUTPUT src_ip
-| where isnotnull(src_ip)
-| rename hostname as dest
-| rex field=_raw "userdel\[\d+\]:\s+delete user [`'](?<user>[A-Za-z0-9._-]+)[`']"
-| where isnotnull(user)
-| eval app="userdel"
-| eval action="delete"
-| eval signature="local_user_deleted"
-| eval first_seen=strftime(_time,"%Y-%m-%d %H:%M:%S")
-| table _time tenant src_ip dest user app action signature first_seen
+#Trạng thái: Đã test
+#NOTE: 
+- Cần bổ sung 1 số filed đặc trưng như tenant 
+- Thêm lookup tương ứng để lấy src
+- Ở đây em parse bằng app Unix and Linux có sẵn nên 1 số field app không parse được em sẽ dùng rex (Chỗ rex này sẽ nhờ anhtq theo đó mà parse ra field)
+
+index=linux sourcetype=linux_secure "userdel[" "delete user"
+| rename host as dest, user_name as user
+| eval first_seen=strftime(_time, "%Y-%m-%d %H:%M:%S")
+| table _time dest user process action first_seen
 
 # Bắt khi một local user bị xóa
 #SAMPLE
 '''
-Feb 10 02:03:11 userdel[1516]: delete user `mike'
+5/14/26
+10:41:43.164 AM	
+2026-05-14T10:41:43.164060+07:00 AGENT userdel[33100]: delete 'testuser_to_delete' from shadow group 'users'
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
+5/14/26
+10:41:43.164 AM	
+2026-05-14T10:41:43.164018+07:00 AGENT userdel[33100]: removed shadow group 'testuser_to_delete' owned by 'testuser_to_delete'
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
+5/14/26
+10:41:43.163 AM	
+2026-05-14T10:41:43.163951+07:00 AGENT userdel[33100]: removed group 'testuser_to_delete' owned by 'testuser_to_delete'
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
+5/14/26
+10:41:43.161 AM	
+2026-05-14T10:41:43.161280+07:00 AGENT userdel[33100]: delete 'testuser_to_delete' from group 'users'
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
+5/14/26
+10:41:43.160 AM	
+2026-05-14T10:41:43.160996+07:00 AGENT userdel[33100]: delete user 'testuser_to_delete'
 '''
