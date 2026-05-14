@@ -12,11 +12,11 @@ index=linux sourcetype=linux_secure "groupmod" "new gid:" "/etc/group"
 
 #SAMPLE
 '''
-5/14/26
+5/13/26
 10:18:55.932 AM	
 2026-05-14T10:18:55.932300+07:00 AGENT groupmod[32862]: group changed in /etc/passwd (group testgroup/1003, new gid: 2000)
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
-5/14/26
+5/13/26
 10:18:55.932 AM	
 2026-05-14T10:18:55.932003+07:00 AGENT groupmod[32862]: group changed in /etc/group (group testgroup/1003, new gid: 2000)
 '''
