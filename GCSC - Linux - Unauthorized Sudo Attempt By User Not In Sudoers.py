@@ -8,10 +8,10 @@ index=linux sourcetype=linux_secure "user NOT in sudoers"
 | rex field=_raw "sudo:\s+(?<src_user>[^ ]+)\s+:"
 | stats 
     count as unauthorized_sudo_attempts,
-    values(COMMAND) as commands,
-    values(PWD) as working_directories,
-    values(TTY) as tty_list,
-    values(USER) as target_users,
+    values(COMMAND) as COMMAND,
+    values(PWD) as PWD,
+    values(TTY) as TTY,
+    values(USER) as USER,
     earliest(_time) as first_time,
     latest(_time) as last_time
     by host src_user
@@ -19,7 +19,7 @@ index=linux sourcetype=linux_secure "user NOT in sudoers"
 | rename host as dest
 | eval first_seen=strftime(first_time,"%Y-%m-%d %H:%M:%S"),
     last_seen=strftime(last_time,"%Y-%m-%d %H:%M:%S")
-| table dest src_user target_users unauthorized_sudo_attempts commands working_directories tty_list first_seen last_seen
+| table dest src_user USER unauthorized_sudo_attempts COMMAD PWD TTY first_seen last_seen
 
 # một user 5 lần trở lên thực hiện sudo nhưng bị từ chối vì không nằm trong sudoers
 #SAMPLE
