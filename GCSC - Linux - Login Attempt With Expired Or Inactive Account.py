@@ -15,7 +15,7 @@ index=linux sourcetype=linux_secure "account" ("has expired" OR "inactive for")
     ),
     event_time=strftime(_time,"%Y-%m-%d %H:%M:%S")
 | where isnotnull(user)
-| table _time dest user process signature event_time
+| table dest user process signature event_time
 
 # Thử đăng nhập bằng tài khoản đã hết hạn hoặc không hoạt động
 #SAMPLE
