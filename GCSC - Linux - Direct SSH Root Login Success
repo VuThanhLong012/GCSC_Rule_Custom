@@ -9,7 +9,7 @@ index=linux sourcetype=linux_secure "Accepted password" OR "Accepted publickey"
 | rename host as dest
 | eval auth_method=coalesce(auth_method, auth_method_raw, if(match(signature, "(?i)password"), "password", "publickey"))
 | eval first_seen=strftime(_time, "%Y-%m-%d %H:%M:%S")
-| table _time src_ip dest src src_port user auth_method action app first_seen
+| table src_ip dest src src_port user auth_method action app first_seen
 
 # đăng nhập SSH thành công trực tiếp vào tài khoản root
 #SAMPLE
