@@ -1,29 +1,31 @@
-# Rule đã ổn => thay bằng macro linux_secure
-index=vpa_os_linux sourcetype=linux_secure
-("error: PAM: User account has expired for" OR "inactive for" "denied")
-| lookup vpa_linux.csv hostname OUTPUT src_ip
-| where isnotnull(src_ip)
-| rename hostname as dest, user_name as user
-| rex field=_raw "error: PAM: User account has expired for (?<user_expired>\S+) from (?<src>\d{1,3}(?:\.\d{1,3}){3})"
-| rex field=_raw "pam_lastlog\([^)]+\): user (?<user_inactive>\S+) inactive for (?<inactive_days>\d+) days - denied"
-| eval user=coalesce(user, user_expired, user_inactive)
-| eval app=case(
-    like(_raw,"%sshd[%"),"sshd",
-    like(_raw,"%login[%"),"login",
-    1=1,"pam"
-)
-| eval signature=case(
-    like(_raw,"%User account has expired%"),"expired_account_login_attempt",
-    like(_raw,"%inactive for%") AND like(_raw,"%denied%"),"inactive_account_login_attempt",
-    1=1,"account_policy_denied"
-)
-| eval action="blocked"
-| eval event_time=strftime(_time,"%Y-%m-%d %H:%M:%S")
-| table _time tenant src_ip dest src user inactive_days app action signature event_time
+#Trạng thái: Đã test
+#NOTE: 
+- Cần bổ sung 1 số filed đặc trưng như tenant 
+- Thêm lookup tương ứng để lấy src
+- Ở đây em parse bằng app Unix and Linux có sẵn nên 1 số field app không parse được em sẽ dùng rex (Chỗ rex này sẽ nhờ anhtq theo đó mà parse ra field)
+
+index=linux sourcetype=linux_secure "account" ("has expired" OR "inactive for")
+| rename host as dest
+| rex field=_raw "account\s+(?<user>\S+)\s+has\s+expired"
+| eval user=coalesce(user, user_inactive),
+    signature=case(
+        searchmatch("has expired"), "expired_account_login_attempt",
+        searchmatch("inactive for"), "inactive_account_login_attempt",
+        1=1, "account_policy_denied"
+    ),
+    event_time=strftime(_time,"%Y-%m-%d %H:%M:%S")
+| where isnotnull(user)
+| table _time dest user process signature event_time
 
 # Thử đăng nhập bằng tài khoản đã hết hạn hoặc không hoạt động
 #SAMPLE
 '''
-Mar 27 16:22:01 server1 sshd[22155]: error: PAM: User account has expired for testuser from 203.0.113.55
-Mar 27 16:25:40 server2 sshd[22901]: pam_lastlog(sshd:account): user weaverw inactive for 71 days - denied
+5/14/26
+10:57:33.934 AM	
+2026-05-14T10:57:33.934998+07:00 AGENT su[33334]: FAILED SU (to expired_user) splagent on pts/2
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
+5/14/26
+10:57:33.933 AM	
+2026-05-14T10:57:33.933673+07:00 AGENT su: pam_unix(su-l:account): account expired_user has expired (account expired)
+host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 '''
