@@ -1,0 +1,18 @@
+Lý do sử dụng các rule auth.log này
+1. Tốc độ cảnh báo
+Log auditd ghi lại hoat động ở tầng kernel => lượng log sinh ra lớn => khi search chạy các rule ngướng như nhập sai pass trên log auditd sẽ nặng
+Log auth cô đọng sẵn phần log xác thực, đổi quyền,... => khi search chạy sẽ nhẹ hơn, tốc độ cảnh báo sẽ nhanh hơn
+
+2. Chi tiết trong các cảnh báo xác thực
+Auditd thường giám sát tiến trình và file => thông tin sẽ thường thấy như file nào bị đọc, tiến trình sshd được chạy,...
+Các rule auth.log này sẽ cover thêm cho khách hàng biết => đăng nhập thành công đó là mật khẩu hay key, đăng nhập thất bại là do sai pass hay toàn khoản bị hết hạn/khóa, lệnh sudo bị từ chối do user không nằm trong danh sách được cấp phép hay do đâu,...
+=> Lượng thông tin sẽ nhiều hơn
+
+3. Giảm thiểu FP
+Ví dụ khi viết rule sử dụng sudo trái phép hay sửa đổi nhóm bằng log auditd, cấu hình dựa trên các hành vi đọc/ghi file hoặc chạy lệnh hệ thống
+=> Các phần mềm tự động, script backup, hoặc các công cụ giám sát hệ thống chạy ngầm cũng thường xuyên thực hiện các hành vi này, dẫn đến hàng loạt cảnh báo FP
+Còn khi auth.log đã ghi nhận chữ "user NOT in sudoers", điều đó có nghĩa là hệ thống đã xác định chính xác đây là một hành vi vi phạm
+
+4. Dự phòng khi hệ thống bị xâm nhập
+Khi atker chiếm được hệ thống cố tắt auditd hoặc xóa file cấu hình auditd để ẩn mình
+=> các  rule này hoạt động dựa trên auth.log hoàn toàn độc lập => atker thực hiện đăng nhập hay sửa đổi user thì log đã được đẩy về siem
