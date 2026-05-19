@@ -50,3 +50,13 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 12:03:40.676 PM	
 2026-05-14T12:03:40.676119+07:00 AGENT gdm-password]: gkr-pam: unlocked login keyring
 '''
+
+#Kỹ thuật khai thác: 
+- T1078 (Valid Accounts). Admin hoặc hacker đăng nhập thành công vào các tài khoản nhạy cảm (như các tài khoản dịch vụ oracle, postgres hoặc root) bằng phương thức Mật khẩu tĩnh thay vì SSH Key.
+
+#Impact: 
+- Mật khẩu tĩnh rất dễ bị Sniffing, bị log lại ở các máy trạm hoặc bị dò quét trúng. Hành vi này làm tăng rủi ro hệ thống.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác minh: Gửi ticket xem đó có phải là hành vi nghiệp vụ của khách hàng không.
+- Cấu hình cứng: Chuyển cấu hình tài khoản đó sang trạng thái chỉ nhận SSH Key trong cấu hình SSH hoặc khóa mật khẩu của tài khoản đó (passwd -l <username>).
