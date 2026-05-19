@@ -223,3 +223,13 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 11:25:01.069 AM	
 2026-05-14T11:25:01.069846+07:00 AGENT CRON[33697]: pam_unix(cron:session): session closed for user root
 ```
+
+#Kỹ thuật khai thác: 
+- T1110.003 (Brute Force: Password Spraying). Biến thể của Brute Force. Kẻ tấn công lấy 1 hoặc 2 mật khẩu rất phổ biến (ví dụ: root) và thử đăng nhập lần lượt trên tất cả các tài khoản có trên hệ thống.
+
+#Impact: 
+- Chỉ cần một user trong hệ thống đặt mật khẩu yếu, hacker sẽ có ngay một tài khoản hợp pháp để vào bên trong mạng nội bộ.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Trace: Tổng hợp danh sách tất cả các tài khoản bị nhắm mục tiêu từ cùng một IP nguồn, có tài khoản nào có trạng thái Accepted không.
+- Chặn IP: Thực hiện block IP nguồn trên Firewall.
