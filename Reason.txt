@@ -15,4 +15,4 @@ Còn khi auth.log đã ghi nhận chữ "user NOT in sudoers", điều đó có 
 
 4. Dự phòng khi hệ thống bị xâm nhập
 Khi atker chiếm được hệ thống cố tắt auditd hoặc xóa file cấu hình auditd để ẩn mình
-=> các  rule này hoạt động dựa trên auth.log hoàn toàn độc lập => atker thực hiện đăng nhập hay sửa đổi user thì log đã được đẩy về siem
+=> các rule này hoạt động dựa trên auth.log hoàn toàn độc lập => atker thực hiện đăng nhập hay sửa đổi user thì log đã được đẩy về siem
