@@ -209,4 +209,4 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 
 #Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
 - Trace: Chạy câu lệnh tương quan trên SIEM để xem ngay sau chuỗi log Failed password có dòng nào là Accepted publickey/password từ IP đó không (Để xác định cuộc tấn công đã thành công chưa).
-- Chặn IP: Thực hiện block IP nguồn trên Firewall.
+- Báo chặn IP: Báo khách hàng thực hiện block IP nguồn trên Firewall.
