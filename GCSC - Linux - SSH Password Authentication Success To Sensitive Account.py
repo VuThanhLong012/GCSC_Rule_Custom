@@ -59,4 +59,3 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 
 #Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
 - Xác minh: Gửi ticket xem đó có phải là hành vi nghiệp vụ của khách hàng không.
-- Cấu hình cứng: Chuyển cấu hình tài khoản đó sang trạng thái chỉ nhận SSH Key trong cấu hình SSH hoặc khóa mật khẩu của tài khoản đó (passwd -l <username>).
