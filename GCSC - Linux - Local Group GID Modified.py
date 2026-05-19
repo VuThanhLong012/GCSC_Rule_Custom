@@ -21,3 +21,12 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 10:18:55.932 AM	
 2026-05-14T10:18:55.932003+07:00 AGENT groupmod[32862]: group changed in /etc/group (group testgroup/1003, new gid: 2000)
 '''
+
+#Kỹ thuật khai thác: 
+- T1098 (Account Manipulation). Kẻ tấn công sau khi vào hệ thống sẽ sử dụng lệnh groupmod hoặc can thiệp trực tiếp vào file /etc/group để sửa đổi GID của một nhóm thông thường thành 0 (ngang hàng với nhóm root).
+
+#Impact:
+- Đây là kỹ thuật leo thang đặc quyền ngầm và Defense Evasion. Một user thuộc nhóm thường lại có toàn quyền đọc/ghi vào các file hệ thống nhạy cảm của root mà không cần phải gõ lệnh sudo, lách qua các rule giám sát sudo thông thường.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác minh: Kiểm tra xem đây có phải hoạt động nâng cấp hệ thống hoặc cài đặt phần mềm đặc thù của đội System Admin hay không.
