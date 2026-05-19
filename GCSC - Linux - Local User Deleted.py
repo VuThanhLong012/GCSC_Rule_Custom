@@ -32,3 +32,13 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 10:41:43.160 AM	
 2026-05-14T10:41:43.160996+07:00 AGENT userdel[33100]: delete user 'testuser_to_delete'
 '''
+
+#Kỹ thuật khai thác: 
+- T1070 (Indicator Removal on Host) hoặc T1485 (Data Destruction). Kẻ tấn công sử dụng lệnh userdel để xóa tài khoản do chúng tạo ra trước đó nhằm xóa dấu vết tấn công, hoặc cố tình xóa tài khoản của Admin hợp pháp/Tài khoản dịch vụ.
+#Impact:
+- Giai đoạn rút lui: Làm mất dấu vết Forensics, gây khó khăn cho việc tra cứu log của user đó.
+- Giai đoạn phá hoại: Làm gián đoạn hoạt động của các ứng dụng phụ thuộc vào tài khoản dịch vụ bị xóa, hoặc khóa đường truy cập của đội vận hành.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác minh: Gửi Ticket xem có hoạt động xóa tài khoản nhân viên nghỉ việc hay không.
+- Trace thêm: Xem ai (tài khoản nào) đã thực thi lệnh userdel.
