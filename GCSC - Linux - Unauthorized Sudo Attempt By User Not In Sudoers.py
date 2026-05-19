@@ -77,3 +77,13 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 2026-05-14T13:15:43.178828+07:00 AGENT gdm-password]: gkr-pam: unlocked login keyring
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 '''
+
+#Kỹ thuật khai thác: 
+- T1548.003 (Abuse Privilege Escalation Mechanism: Sudo and Su). Thường xảy ra sau khi hacker chiếm được quyền của một tài khoản thường (ví dụ: thông qua lỗ hổng Web tạo Webshell chạy dưới quyền user). Hacker sẽ cố gắng gõ lệnh sudo -l hoặc sudo su để kiểm tra và leo quyền.
+
+#Impact: 
+- Đây có thể là phát hiện cho thấy tài khoản thường đó đang bị điều khiển bởi một thực thể độc hại (hoặc hành vi quá giới hạn cho phép). 
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác minh: Gửi ticket xem đó có phải là hành vi nghiệp vụ của khách hàng không.
+- Kiểm tra tiến trình: Rà soát các kết nối mạng hiện thời và các tiến trình đang chạy của user đó để tìm kiếm Reverse Shell hoặc Webshell độc hại.
