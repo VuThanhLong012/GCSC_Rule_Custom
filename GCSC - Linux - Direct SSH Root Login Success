@@ -36,7 +36,7 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 - T1078.003 (Valid Accounts: Local Accounts). Hacker khai thác lỗ hổng cấu hình sai PermitRootLogin yes trong file /etc/ssh/sshd_config, hoặc đã chiếm được mật khẩu tĩnh/Private Key của tài khoản root và đăng nhập trực tiếp từ ngoài vào qua cổng SSH.
 
 #Impact: 
-- Có ngay quyền cao trên hệ thống mà không cần qua bước leo thang quyền lực. 
+- Có ngay quyền cao trên hệ thống mà không cần qua bước leo thang đặc quyền. 
 - Làm mất tính minh bạch vì nếu nhiều admin có thể dùng chung tài khoản root, không biết ai thực sự đang thao tác khi xảy ra sự cố.
 
 #Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
