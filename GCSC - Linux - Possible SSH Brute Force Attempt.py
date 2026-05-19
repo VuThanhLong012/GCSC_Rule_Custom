@@ -199,3 +199,14 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 2026-05-14T11:11:32.217032+07:00 AGENT sshd[33496]: Server listening on 0.0.0.0 port 22.
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 ```
+
+#Kỹ thuật khai thác: 
+- T1110.001 (Brute Force: Password Password Guessing). Kẻ tấn công sử dụng các công cụ quét tự động chạy liên tục hàng trăm/hàng ngàn request đăng nhập với các mật khẩu phổ biến vào một tài khoản cố định (thường là root, admin, ubuntu).
+
+#Impact: 
+- Gây Log Flooding, tiêu tốn tài nguyên hệ thống (CPU/Băng thông). 
+- Rủi ro cao, sẽ bị chiếm quyền nếu tài khoản đó vô tình đặt mật khẩu yếu hoặc chưa được Hardening.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Trace: Chạy câu lệnh tương quan trên SIEM để xem ngay sau chuỗi log Failed password có dòng nào là Accepted publickey/password từ IP đó không (Để xác định cuộc tấn công đã thành công chưa).
+- Chặn IP: Thực hiện block IP nguồn trên Firewall.
