@@ -44,3 +44,12 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 1:22:01.967 PM	
 2026-05-14T13:22:01.967846+07:00 AGENT CRON[36139]: pam_unix(cron:session): session closed for user splagent
 '''
+
+#Kỹ thuật khai thác: 
+- T1098 (Account Manipulation). Kẻ tấn công sau khi vào hệ thống sẽ cố gắng sẽ dùng lệnh usermod -aG sudo/wheel <user> hoặc gpasswd để đưa một tài khoản thường (do chúng tạo ra hoặc tài khoản chúng kiểm soát) vào nhóm có quyền quản trị.
+
+#Impact: 
+- Tạo Backdoor hợp pháp để duy trì quyền truy cập lâu dài. Kẻ tấn công sau đó chỉ cần đăng nhập bằng user thường đó và thoải mái thực thi lệnh root qua sudo mà không cần phải khai thác lại bất kỳ lỗ hổng nào, trốn tránh các rule quét mã độc/webshell.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác minh: Gửi ticket xác minh với khách hàng đây có phải hành vi nghiệp vụ hợp lệ không.
