@@ -232,4 +232,4 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 
 #Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
 - Trace: Tổng hợp danh sách tất cả các tài khoản bị nhắm mục tiêu từ cùng một IP nguồn, có tài khoản nào có trạng thái Accepted không.
-- Chặn IP: Thực hiện block IP nguồn trên Firewall.
+- Báo chặn IP: Báo khách hàng thực hiện block IP nguồn trên Firewall.
