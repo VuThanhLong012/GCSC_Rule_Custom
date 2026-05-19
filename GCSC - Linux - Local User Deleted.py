@@ -40,5 +40,5 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 - Giai đoạn phá hoại: Làm gián đoạn hoạt động của các ứng dụng phụ thuộc vào tài khoản dịch vụ bị xóa, hoặc khóa đường truy cập của đội vận hành.
 
 #Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
-- Xác minh: Gửi Ticket xem có hoạt động xóa tài khoản nhân viên nghỉ việc hay không.
+- Xác minh: Gửi Ticket xem có hoạt động xóa tài khoản hoặc nhân viên nghỉ việc hay không.
 - Trace thêm: Xem ai (tài khoản nào) đã thực thi lệnh userdel.
