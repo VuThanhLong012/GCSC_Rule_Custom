@@ -29,3 +29,13 @@ host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 2026-05-14T10:57:33.933673+07:00 AGENT su: pam_unix(su-l:account): account expired_user has expired (account expired)
 host = AGENTsource = /var/log/auth.logsourcetype = linux_secure
 '''
+
+#Kỹ thuật khai thác: 
+- T1078.003 (Valid Accounts: Local Accounts). Kẻ tấn công (có thể là cựu nhân viên hoặc hacker sở hữu bộ database mật khẩu cũ rò rỉ) cố gắng đăng nhập vào hệ thống bằng các tài khoản đã bị đánh dấu expired hoặc inactive trong file /etc/shadow.
+
+#Impact: 
+- Nguy cơ rò rỉ thông tin xác thực cũ. Đây là mối đe dọa từ nội bộ hoặc hệ thống đang bị rà quét tài khoản từ bên ngoài. Tuy đăng nhập thất bại do PAM chặn, nhưng nó chứng tỏ mật khẩu của tài khoản đó đã bị lộ.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Xác định nguồn: Thu thập src_ip để biết cuộc tấn công đến từ nội bộ hay IP Public từ Internet.
+- Gửi ticket xác minh: Cảnh báo cho chủ sở hữu cũ của tài khoản (nếu là nhân viên nội bộ) để họ kiểm tra lại các thiết bị cá nhân xem có bị lộ mật khẩu dùng chung không.
