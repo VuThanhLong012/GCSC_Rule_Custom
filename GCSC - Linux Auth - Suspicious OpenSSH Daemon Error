@@ -1,0 +1,97 @@
+#Trạng thái: Đã dựng lab và PoC
+#NOTE: 
+- Cần bổ sung 1 số filed đặc trưng như tenant 
+- Thêm lookup tương ứng để lấy src
+- Ở đây em parse bằng app Unix and Linux có sẵn nên 1 số field app không parse được em sẽ dùng rex (Chỗ rex này sẽ nhờ anhtq theo đó mà parse ra field)
+
+index=linux sourcetype=linux_secure "sshd"
+(
+    "unexpected internal error" OR 
+    "unknown or unsupported key type" OR 
+    "invalid certificate signing key" OR 
+    "invalid elliptic curve value" OR 
+    "incorrect signature" OR 
+    "error in libcrypto" OR 
+    "unexpected bytes remain after decoding" OR 
+    "bad string" OR 
+    "crc32 compensation attack" OR 
+    "bad client public DH value" OR 
+    "Corrupted MAC on input" OR
+    "message authentication code incorrect" OR
+    "Bad packet length"
+)
+| eval time=strftime(_time, "%Y-%m-%d %H:%M:%S")
+| table time host _raw
+
+#Phát hiện hành vi gửi các gói tin dữ liệu dị dạng cấu trúc nhằm cố tình làm tràn bộ đệm hoặc lỗi thư viện mã hóa của SSH để chiếm quyền điều khiển
+
+#SAMPLE
+'''
+6/7/26
+9:56:16.164 PM	
+2026-06-07T21:56:16.164501+07:00 gtellab sshd[5238]: ssh_dispatch_run_fatal: Connection from 192.168.29.138 port 56256: message authentication code incorrect [preauth]
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:56:16.162 PM	
+2026-06-07T21:56:16.162210+07:00 gtellab sshd[5238]: Bad packet length 4294967295. [preauth]
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:55:59.835 PM	
+2026-06-07T21:55:59.835216+07:00 gtellab gdm-password]: gkr-pam: unlocked login keyring
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:55:01.408 PM	
+2026-06-07T21:55:01.408569+07:00 gtellab CRON[5133]: pam_unix(cron:session): session closed for user root
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:55:01.402 PM	
+2026-06-07T21:55:01.402640+07:00 gtellab CRON[5133]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:47:17.202 PM	
+2026-06-07T21:47:17.202273+07:00 gtellab sshd[5091]: PAM 2 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.29.138  user=root
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:47:17.201 PM	
+2026-06-07T21:47:17.201918+07:00 gtellab sshd[5091]: Connection closed by authenticating user root 192.168.29.138 port 36226 [preauth]
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:47:15.977 PM	
+2026-06-07T21:47:15.977333+07:00 gtellab sshd[5091]: message repeated 2 times: [ Failed password for root from 192.168.29.138 port 36226 ssh2]
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:47:05.875 PM	
+2026-06-07T21:47:05.875977+07:00 gtellab sshd[5091]: Failed password for root from 192.168.29.138 port 36226 ssh2
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:47:04.003 PM	
+2026-06-07T21:47:04.003112+07:00 gtellab sshd[5091]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.29.138  user=root
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:45:48.870 PM	
+2026-06-07T21:45:48.870953+07:00 gtellab sshd[5079]: banner exchange: Connection from 192.168.29.138 port 46844: invalid format
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:45:27.995 PM	
+2026-06-07T21:45:27.995832+07:00 gtellab sshd[5078]: banner exchange: Connection from 192.168.29.138 port 43070: invalid format
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:45:27.970 PM	
+2026-06-07T21:45:27.970035+07:00 gtellab sshd[5076]: Server listening on :: port 22.
+host = Serversource = auth.logsourcetype = linux_secure
+6/7/26
+9:45:27.969 PM	
+2026-06-07T21:45:27.969451+07:00 gtellab sshd[5076]: Server listening on 0.0.0.0 port 22.
+'''
+
+#Kỹ thuật khai thác: 
+- Kẻ tấn công sử dụng các công cụ rà quét tự động (Fuzzing) hoặc mã khai thác (Exploit Code) để gửi gói tin dị dạng, cố tình sai cấu trúc độ dài bộ đệm hoặc thao túng các tham số mã hóa (sai mã MAC, lỗi thư viện libcrypto) để phá vỡ luồng hoạt động bình thường.
+- TA0001 (Initial Access)
+- TA0002 (Execution)
+
+#Impact: 
+- Kẻ tấn công có thể chiếm quyền kiểm soát máy chủ mà không cần thông tin đăng nhập, hoặc làm sập hoàn toàn dịch vụ SSH của hệ thống.
+
+#Phương án xử lý cho Tier1 (Phần này em viết chưa chuẩn lắm nên cần được góp ý thêm ạ):
+- Kiểm tra trường _raw trong Alert: Nếu xuất hiện tiến trình sshd đi kèm một trong các thông báo lỗi biệt lệ đặc trưng (như Bad packet length, message authentication code incorrect, bad string...) mà không phải là lỗi sai mật khẩu thông thường (Failed password), xác nhận đây là hành vi tấn công True Positive.
+- Xác định địa chỉ IP nguồn phát động cuộc tấn công và máy chủ mục tiêu, sau đó đính kèm chuỗi log thô làm bằng chứng để tạo ticket và escalate lên Tier2.
